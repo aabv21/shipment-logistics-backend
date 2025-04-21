@@ -9,7 +9,7 @@ export class DatabaseFactory {
 
   static async createRedisConfig(): Promise<IRedisConfig> {
     if (!this.redisConfig) {
-      this.redisConfig = new RedisConfig();
+      this.redisConfig = RedisConfig.getInstance();
       await this.redisConfig.connect();
     }
     return this.redisConfig;
@@ -17,7 +17,7 @@ export class DatabaseFactory {
 
   static async createPostgresConfig(): Promise<IPostgresConfig> {
     if (!this.postgresConfig) {
-      this.postgresConfig = new PostgresConfig();
+      this.postgresConfig = PostgresConfig.getInstance();
       await this.postgresConfig.initialize();
     }
     return this.postgresConfig;

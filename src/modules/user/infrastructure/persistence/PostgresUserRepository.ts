@@ -4,10 +4,10 @@ import { User } from "@user/domain/entities/User";
 import { PostgresConfig } from "@config/databases/postgres/PostgresConfig";
 
 export class PostgresUserRepository implements IUserRepository {
-  private readonly pool: Pool;
+  private pool: InstanceType<typeof Pool>;
 
   constructor() {
-    const postgresConfig = new PostgresConfig();
+    const postgresConfig = PostgresConfig.getInstance();
     this.pool = postgresConfig.getPool();
   }
 

@@ -9,7 +9,6 @@ export const validateRequest = <T extends object>(schema: new () => T) => {
     next: NextFunction
   ): Promise<void> => {
     try {
-      console.log(req.body);
       const dto = plainToInstance(schema, req.body);
 
       const errors = await validate(dto, {

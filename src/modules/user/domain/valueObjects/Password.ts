@@ -3,7 +3,6 @@ import bcrypt from "bcryptjs";
 export class Password {
   private constructor(private readonly value: string) {}
 
-  // Para crear una nueva contraseña (registro)
   public static async create(password: string): Promise<Password> {
     if (!this.isValidPassword(password)) {
       throw new Error("La contraseña debe tener al menos 8 caracteres");

@@ -30,23 +30,43 @@ export class CreateShipmentDto {
   @IsString()
   recipient_phone!: string;
 
+  // Origin address
   @Expose()
   @IsString()
-  formatted_address!: string;
+  origin_formatted_address!: string;
 
   @Expose()
   @IsString()
-  place_id!: string;
+  origin_place_id!: string;
 
   @Expose()
   @IsNumber()
   @IsOptional()
-  latitude?: number;
+  origin_latitude?: number;
 
   @Expose()
   @IsNumber()
   @IsOptional()
-  longitude?: number;
+  origin_longitude?: number;
+
+  // Destination address
+  @Expose()
+  @IsString()
+  destination_formatted_address!: string;
+
+  @Expose()
+  @IsString()
+  destination_place_id!: string;
+
+  @Expose()
+  @IsNumber()
+  @IsOptional()
+  destination_latitude?: number;
+
+  @Expose()
+  @IsNumber()
+  @IsOptional()
+  destination_longitude?: number;
 
   @Expose()
   @IsString()

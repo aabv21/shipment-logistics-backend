@@ -65,13 +65,19 @@ CREATE TABLE shipping_orders (
     -- Recipient information
     recipient_name VARCHAR(100) NOT NULL,
     recipient_phone VARCHAR(20) NOT NULL,
-    
+
+    -- Origin address
+    origin_formatted_address TEXT NOT NULL,
+    origin_place_id VARCHAR(255) NOT NULL,
+    origin_latitude DECIMAL(10, 8),
+    origin_longitude DECIMAL(11, 8),
+
     -- Destination address
-    formatted_address TEXT NOT NULL,
-    place_id VARCHAR(255) NOT NULL,
-    latitude DECIMAL(10, 8),
-    longitude DECIMAL(11, 8),
-    
+    destination_formatted_address TEXT NOT NULL,
+    destination_place_id VARCHAR(255) NOT NULL,
+    destination_latitude DECIMAL(10, 8),
+    destination_longitude DECIMAL(11, 8),
+
     -- Additional information
     additional_details TEXT,
     status VARCHAR(20) NOT NULL DEFAULT 'PENDING' 
@@ -88,9 +94,11 @@ CREATE TABLE shipping_orders (
 CREATE TABLE shipping_order_status_history (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     shipping_order_id UUID REFERENCES shipping_orders(id),
-    carrier_id UUID REFERENCES carriers(id),
+    -- carrier_id UUID REFERENCES carriers(id),
     status VARCHAR(20) NOT NULL 
         CHECK (status IN ('PENDING', 'IN_TRANSIT', 'DELIVERED', 'CANCELLED')),
+    location_formatted_address TEXT,
+    location_place_id VARCHAR(255),
     location_latitude DECIMAL(10, 8),
     location_longitude DECIMAL(11, 8),
     notes TEXT,
@@ -104,6 +112,6 @@ CREATE INDEX idx_shipping_orders_user_id ON shipping_orders(user_id);
 CREATE INDEX idx_shipping_orders_route_id ON shipping_orders(route_id);
 CREATE INDEX idx_shipping_orders_carrier_id ON shipping_orders(carrier_id);
 CREATE INDEX idx_carriers_user_id ON carriers(user_id);
-CREATE INDEX idx_carriers_plate_number ON carriers(plate_number);
+CREATE INDEX idx_carriers_vehicle_plate_number ON carriers(vehicle_plate_number);
 CREATE INDEX idx_shipping_order_status_history_order_id ON shipping_order_status_history(shipping_order_id);
-CREATE INDEX idx_shipping_order_status_history_carrier_id ON shipping_order_status_history(carrier_id); 
+-- CREATE INDEX idx_shipping_order_status_history_carrier_id ON shipping_order_status_history(carrier_id); 
