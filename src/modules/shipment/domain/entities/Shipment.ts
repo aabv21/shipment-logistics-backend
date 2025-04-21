@@ -10,10 +10,14 @@ export class Shipment {
     private readonly product_type: string,
     private readonly recipient_name: string,
     private readonly recipient_phone: string,
-    private readonly formatted_address: string,
-    private readonly place_id: string,
-    private readonly latitude: number | null,
-    private readonly longitude: number | null,
+    private readonly origin_formatted_address: string,
+    private readonly origin_place_id: string,
+    private readonly origin_latitude: number | null,
+    private readonly origin_longitude: number | null,
+    private readonly destination_formatted_address: string,
+    private readonly destination_place_id: string,
+    private readonly destination_latitude: number | null,
+    private readonly destination_longitude: number | null,
     private readonly additional_details: string | null,
     private readonly status: string = "PENDING",
     private readonly start_date_time: Date | null,
@@ -32,10 +36,14 @@ export class Shipment {
     product_type: string,
     recipient_name: string,
     recipient_phone: string,
-    formatted_address: string,
-    place_id: string,
-    latitude: number | null = null,
-    longitude: number | null = null,
+    origin_formatted_address: string,
+    origin_place_id: string,
+    origin_latitude: number | null = null,
+    origin_longitude: number | null = null,
+    destination_formatted_address: string,
+    destination_place_id: string,
+    destination_latitude: number | null = null,
+    destination_longitude: number | null = null,
     additional_details: string | null = null,
     start_date_time: Date | null = null,
     delivery_date_time: Date | null = null,
@@ -54,10 +62,14 @@ export class Shipment {
       product_type,
       recipient_name,
       recipient_phone,
-      formatted_address,
-      place_id,
-      latitude,
-      longitude,
+      origin_formatted_address,
+      origin_place_id,
+      origin_latitude,
+      origin_longitude,
+      destination_formatted_address,
+      destination_place_id,
+      destination_latitude,
+      destination_longitude,
       additional_details,
       "PENDING",
       start_date_time,
@@ -83,10 +95,14 @@ export class Shipment {
     product_type: string;
     recipient_name: string;
     recipient_phone: string;
-    formatted_address: string;
-    place_id: string;
-    latitude: number | null;
-    longitude: number | null;
+    origin_formatted_address: string;
+    origin_place_id: string;
+    origin_latitude: number | null;
+    origin_longitude: number | null;
+    destination_formatted_address: string;
+    destination_place_id: string;
+    destination_latitude: number | null;
+    destination_longitude: number | null;
     additional_details: string | null;
     status: string;
     start_date_time: Date | null;
@@ -106,10 +122,14 @@ export class Shipment {
       primitives.product_type,
       primitives.recipient_name,
       primitives.recipient_phone,
-      primitives.formatted_address,
-      primitives.place_id,
-      primitives.latitude,
-      primitives.longitude,
+      primitives.origin_formatted_address,
+      primitives.origin_place_id,
+      primitives.origin_latitude,
+      primitives.origin_longitude,
+      primitives.destination_formatted_address,
+      primitives.destination_place_id,
+      primitives.destination_latitude,
+      primitives.destination_longitude,
       primitives.additional_details,
       primitives.status,
       primitives.start_date_time,
@@ -161,22 +181,37 @@ export class Shipment {
     return this.recipient_phone;
   }
 
-  public getFormattedAddress(): string {
-    return this.formatted_address;
+  public getOriginFormattedAddress(): string {
+    return this.origin_formatted_address;
   }
 
-  public getPlaceId(): string {
-    return this.place_id;
+  public getOriginPlaceId(): string {
+    return this.origin_place_id;
   }
 
-  public getLatitude(): number | null {
-    return this.latitude;
+  public getOriginLatitude(): number | null {
+    return this.origin_latitude;
   }
 
-  public getLongitude(): number | null {
-    return this.longitude;
+  public getOriginLongitude(): number | null {
+    return this.origin_longitude;
   }
 
+  public getDestinationFormattedAddress(): string {
+    return this.destination_formatted_address;
+  }
+
+  public getDestinationPlaceId(): string {
+    return this.destination_place_id;
+  }
+
+  public getDestinationLatitude(): number | null {
+    return this.destination_latitude;
+  }
+
+  public getDestinationLongitude(): number | null {
+    return this.destination_longitude;
+  }
   public getAdditionalDetails(): string | null {
     return this.additional_details;
   }
@@ -217,10 +252,14 @@ export class Shipment {
       product_type: this.product_type,
       recipient_name: this.recipient_name,
       recipient_phone: this.recipient_phone,
-      formatted_address: this.formatted_address,
-      place_id: this.place_id,
-      latitude: this.latitude,
-      longitude: this.longitude,
+      origin_formatted_address: this.origin_formatted_address,
+      origin_place_id: this.origin_place_id,
+      origin_latitude: this.origin_latitude,
+      origin_longitude: this.origin_longitude,
+      destination_formatted_address: this.destination_formatted_address,
+      destination_place_id: this.destination_place_id,
+      destination_latitude: this.destination_latitude,
+      destination_longitude: this.destination_longitude,
       additional_details: this.additional_details,
       status: this.status,
       start_date_time: this.start_date_time,

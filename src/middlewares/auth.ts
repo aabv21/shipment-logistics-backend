@@ -28,12 +28,12 @@ export const authenticateToken = (
       token,
       process.env.JWT_SECRET || "your-secret-key"
     ) as {
-      id: string;
+      userId: string;
       role: string;
     };
 
     req.user = {
-      id: decoded.id,
+      id: decoded.userId,
       role: decoded.role,
     };
 

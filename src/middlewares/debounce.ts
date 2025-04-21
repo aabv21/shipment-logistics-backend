@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 
 // Constants
-const debounceTime = 1000; // 1 second debounce
+const debounceTime = 500; // 0.5 second debounce
 const lastRequestTime: Record<string, number> = {};
 
 const debounceMiddleware = (

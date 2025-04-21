@@ -1,7 +1,7 @@
 import { Shipment } from "../entities/Shipment";
 
 export interface IShipmentRepository {
-  save(shipment: Shipment): Promise<void>;
+  save(shipment: Shipment): Promise<Shipment>;
   findById(id: string): Promise<Shipment | null>;
   findByUserId(
     userId: string,

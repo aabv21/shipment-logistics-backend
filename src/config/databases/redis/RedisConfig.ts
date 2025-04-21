@@ -1,22 +1,36 @@
 import { createClient } from "redis";
 import { IRedisConfig } from "../interfaces/IRedisConfig";
+import { IRedisClient } from "@shared/infrastructure/redis/IRedisClient";
 
-export class RedisConfig implements IRedisConfig {
-  private client: ReturnType<typeof createClient>;
+export class RedisConfig implements IRedisConfig, IRedisClient {
+  private client!: ReturnType<typeof createClient>;
+  private static instance: RedisConfig;
 
-  constructor(
+  private constructor(
     public readonly host: string = process.env.REDIS_HOST || "localhost",
     public readonly port: number = parseInt(process.env.REDIS_PORT || "6379"),
     public readonly username: string = process.env.REDIS_USER || "",
     public readonly password: string = process.env.REDIS_PASSWORD || "",
     public readonly database: string = process.env.REDIS_DB || "0"
   ) {
+    if (RedisConfig.instance) {
+      return RedisConfig.instance;
+    }
+
     this.client = createClient({
       url: this.getConnectionString(),
       password: this.password,
     });
 
     this.setupEventListeners();
+    RedisConfig.instance = this;
+  }
+
+  public static getInstance(): RedisConfig {
+    if (!RedisConfig.instance) {
+      RedisConfig.instance = new RedisConfig();
+    }
+    return RedisConfig.instance;
   }
 
   private setupEventListeners(): void {
@@ -44,5 +58,22 @@ export class RedisConfig implements IRedisConfig {
 
   getClient(): ReturnType<typeof createClient> {
     return this.client;
+  }
+
+  // Implementación de IRedisClient
+  async get(key: string): Promise<string | null> {
+    return this.client.get(key);
+  }
+
+  async set(key: string, value: string, ttlInSeconds?: number): Promise<void> {
+    if (ttlInSeconds) {
+      await this.client.setEx(key, ttlInSeconds, value);
+    } else {
+      await this.client.set(key, value);
+    }
+  }
+
+  async del(key: string): Promise<void> {
+    await this.client.del(key);
   }
 }
