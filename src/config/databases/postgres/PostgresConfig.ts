@@ -29,7 +29,11 @@ export class PostgresConfig implements IPostgresConfig {
       database: this.database,
     });
 
-    this.pool = new Pool(this.getPoolConfig());
+    this.pool = new Pool({
+      ...this.getPoolConfig(),
+      database: "postgres",
+    });
+
     PostgresConfig.instance = this;
   }
 
@@ -42,14 +46,30 @@ export class PostgresConfig implements IPostgresConfig {
 
   async initialize(): Promise<void> {
     try {
-      // Test connection
-      console.log("Testing database connection...");
       const client = await this.pool.connect();
-      console.log("✓ Successfully connected to PostgreSQL database");
-      client.release();
 
-      // Run migrations with the same pool instance
-      console.log("Starting database migrations...");
+      try {
+        const dbExists = await client.query(
+          "SELECT 1 FROM pg_database WHERE datname = $1",
+          [this.database]
+        );
+
+        if (dbExists.rows.length === 0) {
+          await client.query(`CREATE DATABASE ${this.database}`);
+          console.log(`✓ Database ${this.database} created successfully`);
+        }
+      } finally {
+        client.release();
+      }
+
+      await this.pool.end();
+
+      this.pool = new Pool(this.getPoolConfig());
+
+      const newClient = await this.pool.connect();
+      console.log("✓ Successfully connected to PostgreSQL database");
+      newClient.release();
+
       await runMigration(this.pool);
       console.log("✓ Database initialization completed");
     } catch (error) {
@@ -69,10 +89,9 @@ export class PostgresConfig implements IPostgresConfig {
       user: this.username,
       password: this.password,
       database: this.database,
-      // Add some connection pool settings
-      max: 20, // Maximum number of clients in the pool
-      idleTimeoutMillis: 30000, // How long a client is allowed to remain idle before being closed
-      connectionTimeoutMillis: 2000, // How long to wait for a connection
+      max: 20,
+      idleTimeoutMillis: 30000,
+      connectionTimeoutMillis: 2000,
     };
   }
 
