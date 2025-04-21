@@ -131,4 +131,13 @@ export class PostgresShipmentRepository implements IShipmentRepository {
 
     return Shipment.fromPrimitives(result.rows[0]);
   }
+
+  async updateStatus(id: string, status: string): Promise<void> {
+    const query = `
+      UPDATE shipping_orders
+      SET status = $1, updated_at = NOW()
+      WHERE id = $2
+    `;
+    await this.pool.query(query, [status, id]);
+  }
 }

@@ -240,6 +240,36 @@ export class Shipment {
     return this.updated_at;
   }
 
+  public setStatus(status: string): Shipment {
+    return new Shipment(
+      this.id,
+      this.tracking_number,
+      this.user_id,
+      this.weight,
+      this.length,
+      this.width,
+      this.height,
+      this.product_type,
+      this.recipient_name,
+      this.recipient_phone,
+      this.origin_formatted_address,
+      this.origin_place_id,
+      this.origin_latitude,
+      this.origin_longitude,
+      this.destination_formatted_address,
+      this.destination_place_id,
+      this.destination_latitude,
+      this.destination_longitude,
+      this.additional_details,
+      status,
+      this.start_date_time,
+      this.delivery_date_time,
+      this.window_delivery_time,
+      this.created_at,
+      new Date()
+    );
+  }
+
   public toPrimitives() {
     return {
       id: this.id,

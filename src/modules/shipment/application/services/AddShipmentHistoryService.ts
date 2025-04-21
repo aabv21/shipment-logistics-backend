@@ -5,12 +5,14 @@ import {
 import { ShipmentStatusHistory } from "../../domain/entities/ShipmentStatusHistory";
 import { WebSocketService } from "../../../../services/websocket.service";
 import { GetShipmentWithHistoryService } from "./GetShipmentWithHistoryService";
+import { IShipmentRepository } from "../../domain/repositories/IShipmentRepository";
 
 export class AddShipmentHistoryService {
   constructor(
     private readonly historyRepository: ShippingOrderHistoryRepository,
     private readonly wsService: WebSocketService,
-    private readonly getShipmentWithHistoryService: GetShipmentWithHistoryService
+    private readonly getShipmentWithHistoryService: GetShipmentWithHistoryService,
+    private readonly shipmentRepository: IShipmentRepository
   ) {}
 
   async execute(
@@ -19,8 +21,18 @@ export class AddShipmentHistoryService {
   ): Promise<ShipmentStatusHistory> {
     const historyEntry = await this.historyRepository.create(data);
 
+    // Update shipment status
+    const shipment = await this.shipmentRepository.findById(data.shipment_id);
+    if (shipment) {
+      await this.shipmentRepository.updateStatus(data.shipment_id, data.status);
+    }
+
     // Refresh cache immediately
-    await this.getShipmentWithHistoryService.execute(data.shipment_id);
+    const cacheKey = `shipment:${data.shipment_id}`;
+    this.getShipmentWithHistoryService.fetchAndCacheShipment(
+      data.shipment_id,
+      cacheKey
+    );
 
     // Notify through WebSocket with the complete history data after 3 seconds
     setTimeout(() => {

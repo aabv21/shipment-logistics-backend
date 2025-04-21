@@ -44,7 +44,8 @@ export class ShipmentModule {
     this.addShipmentHistoryService = new AddShipmentHistoryService(
       this.shipmentStatusHistoryRepository,
       this.wsService,
-      this.getShipmentWithHistoryService
+      this.getShipmentWithHistoryService,
+      this.shipmentRepository
     );
 
     this.shipmentController = new ShipmentController(

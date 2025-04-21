@@ -44,7 +44,7 @@ export class GetShipmentWithHistoryService {
     }
   }
 
-  private async fetchAndCacheShipment(id: string, cacheKey: string) {
+  public async fetchAndCacheShipment(id: string, cacheKey: string) {
     const shipment = await this.shipmentRepository.findById(id);
     if (!shipment) return null;
 

@@ -14,4 +14,5 @@ export interface IShipmentRepository {
   ): Promise<{ shipments: Shipment[]; total: number }>;
   delete(id: string): Promise<void>;
   findByTrackingNumber(trackingNumber: string): Promise<Shipment | null>;
+  updateStatus(id: string, status: string): Promise<void>;
 }
